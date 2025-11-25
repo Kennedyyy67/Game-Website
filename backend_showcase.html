@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Deals Backend Demo</title>
+</head>
+<body>
+    <h1>Game Deals Backend Showcase</h1>
+
+    <p>Available endpoints:</p>
+    <ul>
+        <li>deals - Get current game deals</li>
+        <li>search - Search games by title</li>
+        <li>game - Get specific game details</li>
+        <li>stores - List all available stores</li>
+        <li>sync - Sync deals to database</li>
+    </ul>
+
+    <button onclick="getDeals()">Get Deals</button>
+
+    <br><br>
+
+    <input type="text" id="searchInput" placeholder="Search games">
+    <button onclick="searchGames()">Search Games</button>
+
+    <br><br>
+
+    <input type="text" id="gameIdInput" placeholder="Game ID">
+    <button onclick="getGameDetails()">Get Game Details</button>
+
+    <br><br>
+
+    <button onclick="getStores()">Get Stores</button>
+
+    <br><br>
+
+    <button onclick="syncDeals()">Sync Deals</button>
+
+    <h2>Response:</h2>
+    <pre id="responseArea">Click any button above to test the API endpoints.</pre>
+
+    <script>
+        const responseArea = document.getElementById('responseArea');
+
+        async function makeRequest(endpoint, params = {}) {
+            responseArea.innerHTML = 'Loading...';
+
+            const queryString = new URLSearchParams(params).toString();
+            const url = `api.php/${endpoint}${queryString ? '?' + queryString : ''}`;
+
+            try {
+                const method = endpoint === 'sync' ? 'POST' : 'GET';
+                const response = await fetch(url, { method });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                responseArea.innerHTML = JSON.stringify(data, null, 2);
+
+                return data;
+            } catch (error) {
+                console.error('API Error:', error);
+                responseArea.innerHTML = `Error: ${error.message}`;
+            }
+        }
+
+        function getDeals() {
+            makeRequest('deals');
+        }
+
+        function searchGames() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) {
+                responseArea.innerHTML = 'Please enter a search term.';
+                return;
+            }
+            makeRequest('search', { q: query });
+        }
+
+        function getGameDetails() {
+            const gameId = document.getElementById('gameIdInput').value.trim();
+            if (!gameId) {
+                responseArea.innerHTML = 'Please enter a Game ID.';
+                return;
+            }
+            makeRequest('game', { id: gameId });
+        }
+
+        function getStores() {
+            makeRequest('stores');
+        }
+
+        function syncDeals() {
+            makeRequest('sync');
+        }
+
+        // Add Enter key support
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') searchGames();
+        });
+
+        document.getElementById('gameIdInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') getGameDetails();
+        });
+    </script>
+</body>
