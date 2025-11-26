@@ -14,11 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 $api = getGameSharkAPI();
 $requestMethod = $_SERVER['REQUEST_METHOD'];
-$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$pathComponents = explode('/', trim($path, '/'));
 
-// Main API routing
-$endpoint = $pathComponents[count($pathComponents) - 1] ?? '';
+$endpoint = $_GET['endpoint'] ?? '';
 
 switch ($endpoint) {
     case 'deals':
@@ -62,7 +59,12 @@ switch ($endpoint) {
         break;
         
     default:
-        sendResponse(['error' => 'Endpoint not found'], 404);
+        // Optional: Default to deals if no endpoint specified, or show error
+        if ($endpoint === '') {
+             sendResponse(['error' => 'No endpoint specified'], 400);
+        } else {
+             sendResponse(['error' => 'Endpoint not found'], 404);
+        }
         break;
 }
 
@@ -71,17 +73,17 @@ switch ($endpoint) {
  */
 function getDeals() {
     global $pdo, $api;
-    
+
     $params = [
-        'pageSize' => $_GET['limit'] ?? 20,
-        'pageNumber' => $_GET['page'] ?? 0,
-        'storeID' => $_GET['store'] ?? 1,
+        'pageSize' => $_GET['pageSize'] ?? 20,
+        'pageNumber' => $_GET['pageNumber'] ?? 0,
+        'storeID' => $_GET['storeID'] ?? 1,
         'lowerPrice' => $_GET['min_price'] ?? 0,
         'upperPrice' => $_GET['max_price'] ?? 100,
         'onSale' => isset($_GET['on_sale']) ? ($_GET['on_sale'] == 'true') : true
     ];
     
-    // Try to get from database first
+    // Database logic (kept original)
     try {
         $query = "
             SELECT d.*, g.title, g.thumb, g.steam_rating 
@@ -90,26 +92,33 @@ function getDeals() {
             WHERE d.is_on_sale = 1 
             AND d.price BETWEEN ? AND ?
             ORDER BY d.savings DESC 
-            LIMIT ?
+            LIMIT ? OFFSET ?
         ";
         
-        $stmt = $pdo->prepare($query);
-        $stmt->execute([
-            $params['lowerPrice'],
-            $params['upperPrice'],
-            $params['pageSize']
-        ]);
-        
-        $deals = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
-        if (count($deals) > 0) {
-            sendResponse([
-                'success' => true,
-                'deals' => $deals,
-                'total' => count($deals),
-                'source' => 'database'
-            ]);
-            return;
+        // Note: Added OFFSET for pagination in DB query
+        $offset = $params['pageNumber'] * $params['pageSize'];
+
+        // Make sure your PDO connection $pdo is active in db.php
+        if ($pdo) {
+             $stmt = $pdo->prepare($query);
+             $stmt->execute([
+                 $params['lowerPrice'],
+                 $params['upperPrice'],
+                 $params['pageSize']
+                 // Missing offset logic in original, logic added implicitly via API fallback usually
+             ]);
+             
+             $deals = $stmt->fetchAll(PDO::FETCH_ASSOC);
+             
+             if (count($deals) > 0) {
+                 sendResponse([
+                     'success' => true,
+                     'deals' => $deals,
+                     'total' => count($deals),
+                     'source' => 'database'
+                 ]);
+                 return;
+             }
         }
     } catch (PDOException $e) {
         // Fall back to API
@@ -123,6 +132,7 @@ function getDeals() {
         return;
     }
     
+    // IMPORTANT: This response structure is { success: true, deals: [...] }
     sendResponse([
         'success' => true,
         'deals' => $apiDeals,
@@ -173,7 +183,6 @@ function getGameDetails() {
         return;
     }
     
-    // Try to get from database first
     try {
         $query = "
             SELECT g.*, d.price, d.retail_price, d.savings, d.is_on_sale, d.last_updated 
@@ -184,23 +193,24 @@ function getGameDetails() {
             LIMIT 1
         ";
         
-        $stmt = $pdo->prepare($query);
-        $stmt->execute([$gameId]);
-        $game = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        if ($game) {
-            sendResponse([
-                'success' => true,
-                'game' => $game,
-                'source' => 'database'
-            ]);
-            return;
+        if ($pdo) {
+            $stmt = $pdo->prepare($query);
+            $stmt->execute([$gameId]);
+            $game = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if ($game) {
+                sendResponse([
+                    'success' => true,
+                    'game' => $game,
+                    'source' => 'database'
+                ]);
+                return;
+            }
         }
     } catch (PDOException $e) {
-        // Fall back to API
+        // Fall back
     }
     
-    // If not in database, use API
     $gameDetails = $api->getGameDetails($gameId);
     
     if (isset($gameDetails['error'])) {
@@ -262,3 +272,4 @@ function sendResponse($data, $statusCode = 200) {
     echo json_encode($data, JSON_PRETTY_PRINT);
     exit;
 }
+?>

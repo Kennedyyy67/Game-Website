@@ -8,7 +8,7 @@ echo "=== Game Deals Backend System Test ===\n\n";
 // Test database connection
 echo "1. Testing database connection...\n";
 try {
-    $pdo = new PDO("mysql:host=localhost;dbname=game_deals", "root", "");
+    $pdo = new PDO("mysql:host=localhost:4306;dbname=game_deals", "root", "");
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     echo "Database connection successful\n";
 } catch(PDOException $e) {
@@ -110,9 +110,9 @@ $endpoints = [
 foreach ($endpoints as $endpoint => $params) {
     $result = testApiEndpoint($endpoint, $params);
     if ($result['status'] === 'available') {
-        echo "✓ Endpoint /$endpoint: {$result['description']}\n";
+        echo "Endpoint /$endpoint: {$result['description']}\n";
     } else {
-        echo "✗ Endpoint /$endpoint: Not responding\n";
+        echo "Endpoint /$endpoint: Not responding\n";
     }
 }
 
