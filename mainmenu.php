@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: log in/main.php");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +23,7 @@
             </div>
             <div class="user-actions">
                 <button class="btn-black">Wishlist</button>
-                <button class="btn-black">Account</button>
+                <button class="btn-black" onclick="window.location='log in/logout.php'">Logout</button> 
             </div>
         </div>
 
