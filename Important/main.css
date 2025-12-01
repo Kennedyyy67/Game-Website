@@ -1,0 +1,184 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0 
+
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    color: white;
+}
+
+
+
+.top-bar {
+    
+    min-height: 150px;
+    max-width: 100%;
+    padding: 1rem 5%;
+    background: #020024;
+    background: radial-gradient(circle, rgba(2, 0, 36, 1) 10%, rgba(53, 238, 121, 1) 100%);
+   
+    display: flex;
+    list-style: none;
+    align-items: center;
+    justify-content: space-between;
+    
+}
+
+.logo {
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    font-weight: 700px;
+
+}
+
+.store-link {
+    font-size: 15px;
+    position: relative;  
+    font-weight: 500px;
+    text-decoration: none;
+    color: white;
+
+    
+
+}
+
+
+.store-nav {
+    background-color: green;
+    min-height: 40px;
+    justify-content: space-evenly; 
+    align-items: center;
+    display: flex;
+    
+}
+
+
+.user-actions{
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+}
+
+.btn-black {
+    font-weight: 400;
+    padding: 0.5rem 1.5rem;
+    border-radius: 20px;
+    font-size: 1rem;
+    transition: 0.5s;
+    
+        
+    color: white;
+    border: none;
+    background-image: linear-gradient(to right, #16222A 0%, #3A6073  51%, #16222A  100%);
+    cursor: pointer;
+}
+
+
+
+.search-container {
+    border-radius: 100px;
+    padding: 0.5rem 1.5rem;
+    border: none;
+    outline: none;
+}
+
+.btn-black:hover {
+    background-position: right center; /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+    box-shadow: 0 0 15px rgb(1, 20, 1);
+}
+         
+
+
+
+
+.grid-container {
+    background-color: rgb(16, 7, 117);
+    grid-template-columns: repeat(4, auto);
+    display: grid;
+    gap: 20px;
+    padding: 2rem;
+
+    
+}
+
+/* Card container */
+.card {
+    background: #1b1b1b;
+    padding: 12px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: white;
+    transition: 0.2s ease;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+}
+
+.card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+/* Image wrapper */
+.card-image {
+    width: 100%;
+    height: 180px; /* Fixed height so all cards are same size */
+    overflow: hidden;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+
+    border-radius: 10px;
+    object-fit: cover;   /* ✔ prevents warping */
+    object-position: center; /* ✔ centers the banner */
+}
+
+/* Game info section */
+.card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* Game title */
+.card-info h3 {
+    font-size: 16px;
+    margin: 0;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+/* Price layout */
+.price {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.price .original {
+    text-decoration: line-through;
+    color: #bbb;
+    font-size: 14px;
+}
+
+.price .sale {
+    color: #4CAF50;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+
+
+
+
