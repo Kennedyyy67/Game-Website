@@ -1,6 +1,6 @@
 <?php
 // Database configuration for Game Deals Website
-$servername = "localhost:4306";
+$servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "game_deals";

@@ -5,6 +5,8 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,14 +19,17 @@ if (!isset($_SESSION['user_id'])) {
 
     <header>
         <div class="top-bar">
-            <div class="logo" onclick="searchMode ? exitSearchMode() : location.reload()">GG</div>
-            <div class="search-container">
-                <input type="text" id="search" placeholder="Search for games...">
+
+            <div class="logo" onclick="searchMode ? exitSearchMode() : location.reload()">GG Deals</div>
+            <div class="search-wrapper">
+                <input class="search-container" type="text" id="search" placeholder="Search for games...">
             </div>
             <div class="user-actions">
                 <button class="btn-black">Wishlist</button>
                 <button class="btn-black" onclick="window.location='log in/logout.php'">Logout</button> 
             </div>
+           
+
         </div>
 
         <nav class="store-nav">
@@ -34,6 +39,8 @@ if (!isset($_SESSION['user_id'])) {
             <a href="#" class="store-link" data-id="7">GoG</a>
             <a href="#" class="store-link" data-id="8">Origin</a>
         </nav>
+
+       
     </header>
 
     <main>
