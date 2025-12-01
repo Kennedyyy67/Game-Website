@@ -45,7 +45,8 @@ if (!isset($_SESSION['user_id'])) {
 
     <main>
         <div class="grid-container" id="deals-grid">
-            </div>
+        
+        </div>
         
         <div class="loader-container">
             <div class="loader" id="loader"></div>
