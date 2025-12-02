@@ -1,0 +1,308 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0 
+
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    color: white;
+    background-color: #1a1a1a;
+}
+
+
+
+/*NAV BAr//////////////////////////////////////////////////////////////////*/
+
+.top-bar {
+    min-height: 100px;
+    max-width: 100%;
+    padding: 1rem 5%;
+   /* background-color: #181726; */
+    background-color: rgb(0, 0, 0);
+    display: flex;
+    list-style: none;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    backdrop-filter: blur(50px);
+    z-index: 888;
+    
+}
+.logowrapper {
+    
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+
+.logoimg {
+    width: 75px;
+    height: 75px;
+}
+
+.logo {
+    font-size: 2.50rem;
+    letter-spacing: 2px;
+    font-weight: 640;
+    color: #3af07b;
+    text-shadow: 0 0 10px #3af07b;
+
+}
+
+.btn-black {
+    display: flex;          
+    align-items: center;     
+    gap: 10px;               
+    font-weight: 300;
+    padding: 0.5rem 1.5rem;
+    border-radius: 30px;
+    font-size: 1.2rem;
+    transition: 0.3s;
+    background-color: #3af07b;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 0 15px #3af07b;
+}
+
+.btnimg {
+    width: 30px;
+    height: 30px;
+    
+}
+.user-actions{
+    display: flex;
+    gap: 30px;
+    justify-content: space-between;
+}
+
+
+
+.search-container {
+    border-radius: 20px;
+    padding: 0.5rem 1.5rem;
+    border: none;
+    outline: none;
+    height: 50px;
+    width: 500px;
+    margin-left: 50px;
+    
+}
+
+.btn-black:hover {
+    background-position: right center; 
+    color: #2bdd1e;
+    text-decoration: none;
+    box-shadow: 0 0 15px rgb(1, 20, 1);
+}
+
+
+/*ABOUT SECTION/////////////////////////////////////////*/
+.about {
+    display: flex; 
+    background-image: url('main.png');
+    background-size: cover;
+    justify-content: center;  
+    gap: 30px;                 
+    padding: 3rem; 
+    text-align: left;
+    min-height: 100%;
+    height: 825px;
+    background-repeat: no-repeat;
+    background-position: center;
+    
+}
+
+
+.textabout {
+    display: flex;
+    flex-direction: column;    
+    max-width: 600px;
+    margin-right: 800px
+        
+}
+
+.textabout h2 {
+    color:  #00950adc;;
+    margin-bottom: 30px;      
+    font-size: 10rem;
+    
+}
+
+.textabout p {
+    font-size: 1.8rem;
+    color: black;
+    padding: 1rem;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*Store Sections////////////////////////////////////////////////////////*/
+
+.store-link {
+    font-size: 15px;
+    position: relative;  
+    font-weight: 500px;
+    text-decoration: none;
+    color: white;
+
+    
+
+}
+
+.hstores h3 {
+    margin: 0 auto;
+    text-align: center;     
+    padding-top: 40px;
+    background-color: rgb(0, 0, 0);
+}
+
+.stores {
+    background-color: rgb(0, 0, 0);
+    position: relative;
+    align-items: center;
+    
+
+}
+
+
+.store-nav {
+    
+    min-height: 200px;
+    justify-content: space-evenly; 
+    align-items: center;
+    display: flex;
+    
+}
+
+
+.user-actions{
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+}
+
+
+
+
+         
+
+
+/*THE ACTUAL DISPLAY SANG MGA GAMES//////////////////////////////////////////////////*/
+
+.grid-container {
+    background: #181b24;
+    grid-template-columns: repeat(4, auto);
+    display: grid;
+    gap: 10px;
+    padding: 2rem;
+    margin: 2rem;
+    border-radius: 30px;
+    justify-content: space-between;
+
+    
+}
+
+/* Card container */
+.card {
+    background: #1b1b1b;
+    padding: 0;
+    border-radius: 0px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    color: white;
+    transition: 0.2s ease;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+    height: 150px;
+    max-width: 225px;
+}
+
+.card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+/* Image wrapper */
+.card-image {
+    width: 100%;
+    /*height: 180px; /* Fixed height so all cards are same size */
+    overflow: hidden;
+    border-radius: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.card-image img {
+    width: 100%;
+    max-height: 150px;
+    height: auto;
+
+    display: block;
+    border-radius: 0;;
+
+    border-radius: 10px;
+    object-fit: contain;   /* ✔ prevents warping */
+    object-position: center; /* ✔ centers the banner */
+}
+
+/* Game info section */
+.card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* Game title */
+.card-info h3 {
+    font-size: 16px;
+    margin: 0;
+    font-weight: 600;
+    line-height: 1.2;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Price layout */
+.price {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.price .original {
+    text-decoration: line-through;
+    color:white;
+    font-size: 14px;
+}
+
+.price .sale {
+    color: #4CAF50;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+
+
+
+
