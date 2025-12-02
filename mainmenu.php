@@ -17,31 +17,60 @@ if (!isset($_SESSION['user_id'])) {
 </head>
 <body>
 
-    <header>
-        <div class="top-bar">
+   
 
-            <div class="logo" onclick="searchMode ? exitSearchMode() : location.reload()">GG Deals</div>
+        <div class="top-bar">
+            <div class="logowrapper">
+                <img src="Important/gglogo.png" alt="GG Deals Logo" class="logoimg">
+            
+            <div class="logo" onclick="searchMode ? exitSearchMode() : location.reload()">Deals</div>
+            </div>
             <div class="search-wrapper">
                 <input class="search-container" type="text" id="search" placeholder="Search for games...">
             </div>
             <div class="user-actions">
-                <button class="btn-black">Wishlist</button>
-                <button class="btn-black" onclick="window.location='log in/logout.php'">Logout</button> 
+               
+                <button class="btn-black">
+                    <img src="Important/favorite.png" alt="GG Deals Logo" class="btnimg">Wishlist</button>
+                
+              
+                    
+                <button class="btn-black" onclick="window.location='log in/logout.php'">
+                    <img src="Important/profile.png" alt="GG Deals Logo" class="btnimg">Logout</button> 
+          
             </div>
+
+        </div>
+        
+
+        <div class="about">
+            
+            <!-- <img src="Important/aboutpic.jpg" alt="GG Deals Logo" class="about-img"> -->
+            <div class="textabout">
+            <h2>Welcome User!</h2>
+            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Suscipit a nobis, adipisci voluptas nihil error iure nostrum ullam dolorem mollitia expedita facere dolor corporis odio laudantium eos minima quod asperiores.</p>
+            </div>
+        </div>
            
 
         </div>
 
-        <nav class="store-nav">
+        <nav class="stores">
+            <div class="hstores">
+                <h3>Supported by One of the most known Game Stores</h3>
+            </div>
+            
+            <nav class="store-nav">
             <a href="#" class="store-link active" data-id="1">Steam</a>
             <a href="#" class="store-link" data-id="2">GamersGate</a>
             <a href="#" class="store-link" data-id="15">Fanatical</a>
             <a href="#" class="store-link" data-id="7">GoG</a>
             <a href="#" class="store-link" data-id="8">Origin</a>
+            </nav>
         </nav>
 
        
-    </header>
+   
 
     <main>
         <div class="grid-container" id="deals-grid">
