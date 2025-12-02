@@ -240,7 +240,7 @@ body {
 /* Image wrapper */
 .card-image {
     width: 100%;
-    /*height: 180px; /* Fixed height so all cards are same size */
+    /*height: 180px;*/
     overflow: hidden;
     border-radius: 0;
     display: flex;
@@ -259,18 +259,18 @@ body {
     border-radius: 0;;
 
     border-radius: 10px;
-    object-fit: contain;   /* ✔ prevents warping */
-    object-position: center; /* ✔ centers the banner */
+    object-fit: contain;   
+    object-position: center;
 }
 
-/* Game info section */
+
 .card-info {
     display: flex;
     flex-direction: column;
     gap: 5px;
 }
 
-/* Game title */
+
 .card-info h3 {
     font-size: 16px;
     margin: 0;
@@ -283,7 +283,7 @@ body {
     text-overflow: ellipsis;
 }
 
-/* Price layout */
+
 .price {
     display: flex;
     align-items: center;
