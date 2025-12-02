@@ -80,7 +80,9 @@ function getDeals() {
         'storeID' => $_GET['storeID'] ?? 1,
         'lowerPrice' => $_GET['min_price'] ?? 0,
         'upperPrice' => $_GET['max_price'] ?? 100,
-        'onSale' => isset($_GET['on_sale']) ? ($_GET['on_sale'] == 'true') : true
+        'onSale' => isset($_GET['on_sale']) ? ($_GET['on_sale'] == 'true') : true,
+        'sortBy' => $_GET['sortBy'] ?? 'Deal Rating',
+        'desc' => isset($_GET['desc']) ? ($_GET['desc'] == 'true') : true
     ];
     
     // Database logic (kept original)
