@@ -15,7 +15,7 @@ class WishlistManager {
     /**
      * Add game to user's wishlist
      */
-    public function addToWishlist($userId, $gameId, $storeId = null, $targetPrice = null) {
+    public function addToWishlist($userId, $gameId, $storeId = null, $targetPrice = null, $notes = null) {
         try {
             // Check if already in wishlist
             $checkStmt = $this->pdo->prepare("
@@ -126,10 +126,10 @@ class WishlistManager {
             
             // Add to wishlist
             $insertStmt = $this->pdo->prepare("
-                INSERT INTO user_wishlist (user_id, game_id, store_id, target_price)
-                VALUES (?, ?, ?, ?)
+                INSERT INTO user_wishlist (user_id, game_id, store_id, target_price, notes)
+                VALUES (?, ?, ?, ?, ?)
             ");
-            $insertStmt->execute([$userId, $gameId, $storeId, $targetPrice]);
+            $insertStmt->execute([$userId, $gameId, $storeId, $targetPrice, $notes]);
             
             return ['success' => true, 'message' => 'Game added to wishlist'];
             
@@ -203,18 +203,41 @@ class WishlistManager {
     public function updateTargetPrice($userId, $gameId, $targetPrice) {
         try {
             $stmt = $this->pdo->prepare("
-                UPDATE user_wishlist 
-                SET target_price = ? 
+                UPDATE user_wishlist
+                SET target_price = ?
                 WHERE user_id = ? AND game_id = ?
             ");
             $stmt->execute([$targetPrice, $userId, $gameId]);
-            
+
             if ($stmt->rowCount() > 0) {
                 return ['success' => true, 'message' => 'Target price updated'];
             } else {
                 return ['success' => false, 'error' => 'Wishlist item not found'];
             }
-            
+
+        } catch (PDOException $e) {
+            return ['success' => false, 'error' => 'Database error: ' . $e->getMessage()];
+        }
+    }
+
+    /**
+     * Update notes for wishlist item
+     */
+    public function updateNotes($userId, $gameId, $notes) {
+        try {
+            $stmt = $this->pdo->prepare("
+                UPDATE user_wishlist
+                SET notes = ?
+                WHERE user_id = ? AND game_id = ?
+            ");
+            $stmt->execute([$notes, $userId, $gameId]);
+
+            if ($stmt->rowCount() > 0) {
+                return ['success' => true, 'message' => 'Notes updated'];
+            } else {
+                return ['success' => false, 'error' => 'Wishlist item not found'];
+            }
+
         } catch (PDOException $e) {
             return ['success' => false, 'error' => 'Database error: ' . $e->getMessage()];
         }

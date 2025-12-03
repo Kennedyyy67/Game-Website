@@ -128,9 +128,16 @@ if (!isset($_SESSION['user_id'])) {
         }
 
         
-          // --- Wishlist Functions ---
+        // --- Wishlist Functions ---
         async function addToWishlist(event, gameId, targetPrice = null) {
             event.stopPropagation();
+
+            // Prompt for notes
+            const notes = prompt('Add notes for this game (optional):', '');
+            if (notes === null) {
+                return; // User cancelled
+            }
+
             const button = document.querySelector(`button[data-game-id="${gameId}"]`);
             if (button) {
                 button.disabled = true;
@@ -142,6 +149,9 @@ if (!isset($_SESSION['user_id'])) {
             formData.append('store_id', currentStoreId);
             if (targetPrice !== null) {
                 formData.append('target_price', targetPrice);
+            }
+            if (notes.trim() !== '') {
+                formData.append('notes', notes);
             }
 
             try {

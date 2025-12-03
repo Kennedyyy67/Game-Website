@@ -26,7 +26,9 @@ $wishlistItems = array_map(function($item) {
         'salePrice' => $item['current_price'] ?? 'N/A',
         'savings' => round($item['savings'] ?? 0),
         'createdAt' => date('M d, Y', strtotime($item['created_at'])),
-        'dealID' => $item['deal_id'] ?? null
+        'dealID' => $item['deal_id'] ?? null,
+        'notes' => $item['notes'] ?? '',
+        'notesDisplay' => htmlspecialchars($item['notes'] ?? '')
     ];
 }, $wishlist);
 
@@ -87,6 +89,35 @@ $wishlistItems = array_map(function($item) {
             }
         }
 
+        function editNotes(button, gameId) {
+            const currentNotes = decodeURIComponent(button.dataset.notes) || '';
+            const newNotes = prompt('Edit notes for this game:', currentNotes);
+            if (newNotes !== null && newNotes !== currentNotes) {
+                const formData = new FormData();
+                formData.append('game_id', gameId);
+                formData.append('field', 'notes');
+                formData.append('value', newNotes);
+
+                fetch('updwish.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        alert(result.message);
+                        window.location.reload(); // Reload to update the notes
+                    } else {
+                        alert('Error updating notes: ' + (result.error || 'Unknown error.'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Network error:', error);
+                    alert('An error occurred while updating notes.');
+                });
+            }
+        }
+
         function renderDeals(deals) {
             deals.forEach(game => {
                 const card = document.createElement('div');
@@ -100,12 +131,14 @@ $wishlistItems = array_map(function($item) {
                     </div>
                     <div class="card-info">
                         <p><strong>Added On:</strong> ${game.createdAt}</p>
+                        ${game.notesDisplay ? `<p><strong>Notes:</strong> ${game.notesDisplay}</p>` : ''}
                         <h3>${game.title}</h3>
                         <div class="price">
                             <span class="original">$${game.normalPrice}</span>
                             <span class="sale">$${game.salePrice}</span>
                             <span style="font-size:12px; color:#ff4444; margin-left:5px;">-${savings}%</span>
                         </div>
+                        <button data-notes="${encodeURIComponent(game.notes)}" onclick="editNotes(this, '${game.gameID}')">Edit Notes</button>
                         <button onclick="removeFromWishlist('${game.gameID}')">Remove</button>
                     </div>
                 `;

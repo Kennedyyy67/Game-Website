@@ -22,6 +22,7 @@ require_once 'wishlist_manager.php';
 $gameId = $_POST['game_id'] ?? null;
 $storeId = $_POST['store_id'] ?? null;
 $targetPrice = $_POST['target_price'] ?? null;
+$notes = $_POST['notes'] ?? null;
 $userId = $_SESSION['user_id'];
 
 // Basic validation
@@ -37,7 +38,7 @@ try {
     // The targetPrice might be an empty string from the form, convert to null if so.
     $targetPrice = $targetPrice === '' ? null : (float)$targetPrice;
 
-    $result = $wishlistManager->addToWishlist($userId, $gameId, $storeId, $targetPrice);
+    $result = $wishlistManager->addToWishlist($userId, $gameId, $storeId, $targetPrice, $notes);
     
     echo json_encode($result);
 
