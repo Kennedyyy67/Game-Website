@@ -6,8 +6,6 @@ if (!isset($_SESSION['user_id'])) {
 }
 ?>
 <!DOCTYPE html>
-Fix the bug in the search menu where the sales arent shown and is shown as original price instead, it should show as (Original price, sale, savings percent) The first image is the bug on the search menu, the second image is what it should look like
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
