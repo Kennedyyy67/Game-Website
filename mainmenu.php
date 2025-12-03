@@ -127,6 +127,51 @@ if (!isset($_SESSION['user_id'])) {
             nextBtn.disabled = !hasNext;
         }
 
+        
+          // --- Wishlist Functions ---
+        async function addToWishlist(gameId, targetPrice = null) {
+            const button = document.querySelector(`button[data-game-id="${gameId}"]`);
+            if (button) {
+                button.disabled = true;
+                button.textContent = 'Adding...';
+            }
+
+            const formData = new FormData();
+            formData.append('game_id', gameId);
+            if (targetPrice !== null) {
+                formData.append('target_price', targetPrice);
+            }
+
+            try {
+                const response = await fetch('addwishlist.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('Success: ' + result.message);
+                    if (button) {
+                        button.textContent = 'Added!';
+                        button.classList.add('added');
+                    }
+                } else {
+                    alert('Error: ' + (result.error || 'Failed to add game to wishlist.'));
+                    if (button) {
+                        button.disabled = false;
+                        button.textContent = 'Add to Wishlist';
+                    }
+                }
+            } catch (error) {
+                console.error('Network error:', error);
+                alert('An error occurred while adding to the wishlist.');
+                if (button) {
+                    button.disabled = false;
+                    button.textContent = 'Add to Wishlist';
+                }
+            }
+        }
+
         // --- Core Functions ---
 
         async function performSearch() {
@@ -232,6 +277,7 @@ if (!isset($_SESSION['user_id'])) {
                             <span class="sale">$${game.salePrice}</span>
                             <span style="font-size:12px; color:#ff4444; margin-left:5px;">-${savings}%</span>
                         </div>
+                         <button class="btn-black add-to-wishlist-btn" data-game-id="${game.gameID}" onclick="addToWishlist('${game.gameID}')">Add to Wishlist</button>
                     </div>
                 `;
 
