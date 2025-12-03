@@ -59,7 +59,9 @@ try {
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
             game_id VARCHAR(100) NOT NULL,
+            store_id VARCHAR(50),
             target_price DECIMAL(10,2),
+            notes TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (user_id) REFERENCES users(id),
             FOREIGN KEY (game_id) REFERENCES games(game_id)
@@ -70,6 +72,9 @@ try {
         $pdo->exec($query);
         echo "Table created successfully.<br>";
     }
+
+    // Add notes column to user_wishlist if it doesn't exist (for migration)
+    $pdo->exec("ALTER TABLE user_wishlist ADD COLUMN IF NOT EXISTS notes TEXT AFTER target_price");
 
     echo "<br><strong>Database setup completed successfully!</strong>";
     echo "<br>The 'game_deals' database is now ready.";

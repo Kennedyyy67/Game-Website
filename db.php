@@ -1,6 +1,6 @@
 <?php
 // Database configuration for Game Deals Website
-$servername = "localhost";
+$servername = "localhost:4306";
 $username = "root";
 $password = "";
 $dbname = "game_deals";
@@ -51,7 +51,9 @@ $createTables = [
         id INT AUTO_INCREMENT PRIMARY KEY,
         user_id INT NOT NULL,
         game_id VARCHAR(100) NOT NULL,
+        store_id VARCHAR(50),
         target_price DECIMAL(10,2),
+        notes TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (user_id) REFERENCES users(id),
         FOREIGN KEY (game_id) REFERENCES games(game_id)
@@ -65,4 +67,21 @@ foreach ($createTables as $query) {
         // Table might already exist, continue
     }
 }
+
+
+//   Migration script to add store_id column to user_wishlist table
+ 
+// require_once 'db.php';
+
+// try {
+//     global $pdo;
+//     $pdo->exec('ALTER TABLE user_wishlist ADD COLUMN store_id VARCHAR(50) DEFAULT NULL');
+//     echo "Successfully added store_id column to user_wishlist table\n";
+// } catch (PDOException $e) {
+//     if (strpos($e->getMessage(), 'Duplicate column name') !== false) {
+//         echo "store_id column already exists\n";
+//     } else {
+//         echo "Error: " . $e->getMessage() . "\n";
+//     }
+// } 
 ?>
