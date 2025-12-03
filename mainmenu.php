@@ -95,7 +95,6 @@ if (!isset($_SESSION['user_id'])) {
 
 <script>
     // --- Configuration ---
-    // Removed trailing slash, using query param routing for stability
     const API_BASE = 'api.php';
     const pageSize = 16;
     let currentStoreId = 1;
@@ -121,16 +120,12 @@ if (!isset($_SESSION['user_id'])) {
         nextBtn.disabled = !hasNext;
     }
 
-    
     // --- Wishlist Functions ---
     async function addToWishlist(event, gameId, targetPrice = null) {
-        event.stopPropagation();
+        event.stopPropagation(); // Prevents the card click event from triggering
 
-        // Prompt for notes
         const notes = prompt('Add notes for this game (optional):', '');
-        if (notes === null) {
-            return; // User cancelled
-        }
+        if (notes === null) return; 
 
         const button = document.querySelector(`button[data-game-id="${gameId}"]`);
         if (button) {
@@ -141,18 +136,11 @@ if (!isset($_SESSION['user_id'])) {
         const formData = new FormData();
         formData.append('game_id', gameId);
         formData.append('store_id', currentStoreId);
-        if (targetPrice !== null) {
-            formData.append('target_price', targetPrice);
-        }
-        if (notes.trim() !== '') {
-            formData.append('notes', notes);
-        }
+        if (targetPrice !== null) formData.append('target_price', targetPrice);
+        if (notes.trim() !== '') formData.append('notes', notes);
 
         try {
-            const response = await fetch('addwishlist.php', {
-                method: 'POST',
-                body: formData
-            });
+            const response = await fetch('addwishlist.php', { method: 'POST', body: formData });
             const result = await response.json();
 
             if (result.success) {
@@ -189,26 +177,28 @@ if (!isset($_SESSION['user_id'])) {
         loader.classList.add('show');
 
         try {
-            //Updated URL structure to use endpoint parameter
             const url = `${API_BASE}?endpoint=search&q=${encodeURIComponent(query)}&limit=20`;
             const response = await fetch(url);
             const data = await response.json();
 
-            // Check for data.results (Backend returns { success: true, results: [...] })
             if (data.success && data.results && data.results.length > 0) {
                 const processedResults = data.results.map(game => {
                     const title = game.title || game.external || 'Unknown Title';
                     const salePrice = game.cheapest || (game.cheapestPriceEver && game.cheapestPriceEver.price) || game.price || 'N/A';
                     let normalPrice = game.normalPrice || game.retailPrice;
                     const savings = Math.round(game.savings || 0);
+                    
                     if (!normalPrice && savings > 0) {
                         normalPrice = (salePrice / (1 - (savings / 100))).toFixed(2);
                     } else if (!normalPrice) {
                         normalPrice = salePrice;
                     }
+
                     return {
                         title,
                         gameID: game.gameID,
+                        // UPDATED: Capture the cheapestDealID from search results
+                        dealID: game.cheapestDealID, 
                         thumb: game.thumb,
                         normalPrice,
                         salePrice,
@@ -226,8 +216,6 @@ if (!isset($_SESSION['user_id'])) {
             loader.classList.remove('show');
         }
     }
-
-
 
     function exitSearchMode() {
         if (searchMode) {
@@ -297,7 +285,9 @@ if (!isset($_SESSION['user_id'])) {
                 </div>
             `;
 
-            if (!searchMode && game.dealID) {
+            // UPDATED: Removed check for !searchMode. 
+            // Now, as long as a dealID exists, the card is clickable.
+            if (game.dealID) {
                 card.style.cursor = 'pointer';
                 card.onclick = () => {
                     try {
@@ -317,21 +307,18 @@ if (!isset($_SESSION['user_id'])) {
         const target = event.target;
         const newStoreId = target.getAttribute('data-id');
 
-        if (searchMode) {
-            exitSearchMode();
-        }
-
+        if (searchMode) exitSearchMode();
         if (currentStoreId == newStoreId) return;
 
         navLinks.forEach(link => link.classList.remove('active'));
         target.classList.add('active');
 
         currentStoreId = newStoreId;
-        currentPage = 0; // Reset page on store switch
-        hasNext = true; // Reset availability
+        currentPage = 0; 
+        hasNext = true; 
         hasPrev = false;
         grid.innerHTML = '';
-        fetchDeals(); // Trigger fetch immediately
+        fetchDeals(); 
     }
 
     window.addEventListener('DOMContentLoaded', () => {
@@ -370,7 +357,7 @@ if (!isset($_SESSION['user_id'])) {
         if (currentSort === newSort) return;
 
         currentSort = newSort;
-        currentPage = 0; // Reset to first page when sorting changes
+        currentPage = 0; 
         hasNext = true;
         hasPrev = false;
         grid.innerHTML = '';
@@ -380,7 +367,7 @@ if (!isset($_SESSION['user_id'])) {
     sortDirectionBtn.addEventListener('click', () => {
         sortDescending = !sortDescending;
         sortDirectionBtn.textContent = sortDescending ? '▼' : '▲';
-        currentPage = 0; // Reset to first page when direction changes
+        currentPage = 0; 
         hasNext = true;
         hasPrev = false;
         grid.innerHTML = '';
