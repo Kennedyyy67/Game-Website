@@ -47,10 +47,8 @@ $error = $result['success'] ? null : $result['error'];
                 <?php foreach ($wishlist as $item): 
                     $title = htmlspecialchars($item['title'] ?? 'Unknown Title');
                     $thumb = htmlspecialchars($item['thumb'] ?? 'placeholder.jpg');
-                    $targetPrice = $item['target_price'] ? '$' . number_format($item['target_price'], 2) : 'N/A';
                     $gameId = htmlspecialchars($item['game_id']);
                     $createdAt = date('M d, Y', strtotime($item['created_at']));
-                    $alertText = $item['price_alert'] ? 'PRICE ALERT!' : 'No Alert';
                 ?>
                     <!-- Wishlist Item Card -->
                     <div>
@@ -58,8 +56,6 @@ $error = $result['success'] ? null : $result['error'];
                         <h3><?= $title ?></h3>
                         <div class="price-info">
                         <p><strong>Added On:</strong> <?= $createdAt ?></p>
-                        <p>Target: <?= $targetPrice ?></p>
-                        <p style="color: <?= $item['price_alert'] ? 'green' : 'red' ?>; font-weight: bold;"><?= $alertText ?></p>
                         <button onclick="removeFromWishlist('<?= $gameId ?>')">Remove</button>
                     </div>
                 <?php endforeach; ?>
@@ -95,3 +91,4 @@ $error = $result['success'] ? null : $result['error'];
     </script>
 </body>
 </html>
+
