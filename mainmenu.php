@@ -13,8 +13,6 @@ if (!isset($_SESSION['user_id'])) {
     <link rel="stylesheet" href="Important/main.css">
 </head>
 <body>
-code
-Code
 <div class="top-bar">
         <div class="logowrapper">
             <img src="Important/gglogo.png" alt="GG Deals Logo" class="logoimg">
