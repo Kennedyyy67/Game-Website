@@ -36,7 +36,7 @@ class WishlistManager {
             
             if (!$gameStmt->fetch()) {
                 $gameDetails = $this->api->getGameDetails($gameId);
-                if (isset($gameDetails['error'])) {
+                if (isset($gameDetails['error']) || !isset($gameDetails['info'])) {
                     return ['success' => false, 'error' => 'Game not found'];
                 }
                 
