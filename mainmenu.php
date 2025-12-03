@@ -30,7 +30,7 @@ if (!isset($_SESSION['user_id'])) {
             </div>
             <div class="user-actions">
                
-                <button class="btn-black">
+                <button class="btn-black" onclick="window.location='wishlist.php'">
                     <img src="Important/favorite.png" alt="GG Deals Logo" class="btnimg">Wishlist</button>
                 
               
@@ -129,7 +129,8 @@ if (!isset($_SESSION['user_id'])) {
 
         
           // --- Wishlist Functions ---
-        async function addToWishlist(gameId, targetPrice = null) {
+        async function addToWishlist(event, gameId, targetPrice = null) {
+            event.stopPropagation();
             const button = document.querySelector(`button[data-game-id="${gameId}"]`);
             if (button) {
                 button.disabled = true;
@@ -277,7 +278,7 @@ if (!isset($_SESSION['user_id'])) {
                             <span class="sale">$${game.salePrice}</span>
                             <span style="font-size:12px; color:#ff4444; margin-left:5px;">-${savings}%</span>
                         </div>
-                         <button class="btn-black add-to-wishlist-btn" data-game-id="${game.gameID}" onclick="addToWishlist('${game.gameID}')">Add to Wishlist</button>
+                         <button class="btn-black add-to-wishlist-btn" data-game-id="${game.gameID}" onclick="addToWishlist(event,'${game.gameID}')">Add to Wishlist</button>
                     </div>
                 `;
 
