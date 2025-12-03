@@ -198,6 +198,7 @@ if (!isset($_SESSION['user_id'])) {
                         const savings = Math.round(game.savings || 0);
                         return {
                             title,
+                            gameID: game.gameID,
                             thumb: game.thumb,
                             normalPrice,
                             salePrice,
