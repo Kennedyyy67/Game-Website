@@ -104,8 +104,9 @@ body::after {
     border: none;
     border-radius: 40px;
     font-size: 25px;
-    font-weight: 300;
-
+    font-weight: 700;
+    font-family: "Jost", sans-serif;
+    
 
 }
 
@@ -131,7 +132,9 @@ body::after {
     border: none;
     border-radius: 40px;
     font-size: 25px;
-    font-weight: 500;
+    font-weight: 700;
+    font-family: "Jost", sans-serif;
+
 
 }
 

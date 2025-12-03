@@ -66,7 +66,7 @@ body {
     display: flex;          
 align-items: center;     
     gap: 10px;               
-    font-weight: 300;
+    font-weight: 700;
  padding: 0.5rem 1.5rem;
       border-radius: 30px; 
 font-size: 1.2rem;
@@ -75,6 +75,8 @@ font-size: 1.2rem;
   border: none;
     cursor: pointer;
     box-shadow: 0 0 15px #3af07b;
+    font-family: "Jost", sans-serif;
+    
 }
 
 .btnimg {
@@ -227,7 +229,7 @@ font-size: 1.2rem;
    display: flex;
       align-items: center;
     gap: 12px;
-   border-radius: 12px;
+   border-radius: 30px;
     color: rgb(0, 0, 0);
   box-shadow: 0 0 15px rgba(38, 164, 0, 0.53);
 }
@@ -235,6 +237,7 @@ font-size: 1.2rem;
 .sort-container label {
     font-size: 1.1rem;
      font-weight: 700;
+     font-family: "Jost", sans-serif;
      
 }
 
@@ -248,21 +251,19 @@ font-size: 1.2rem;
     color: rgb(59, 203, 22);
     outline: 0;
     border: 0;;
+    font-family: "Jost", sans-serif;
+    font-weight: 500;
 }
 
 
 #sort-direction-btn {
-
     width: 45px; 
     height: 45px;
       font-size: 22px;
     line-height: 0;              
-
-    display: flex;
-    align-items: center ;
+      align-items: center ;
     justify-content: center ;
-
-    background: #15f205;
+      background: #66f25c;
     color: #000;
     border: none;
     border-radius: 10px;
@@ -402,6 +403,7 @@ border-radius: 10px;
     color: white;
     justify-content: space-between;
     margin-bottom: 100px;
+    
 
 
 }
@@ -415,9 +417,10 @@ border-radius: 10px;
       display: flex;
     align-items: center;
       background-color: #2bdd1e;
-      color: rgb(255, 255, 255);
+      color: rgb(0, 0, 0);
       cursor: pointer;
 font-weight: 500;
+font-family: "Jost", sans-serif;
 }
 
 .pagination button:hover {
@@ -442,6 +445,7 @@ transition: 0.3s;
        border-radius: 30px;
       border: none;
     outline: none;
+    font-family: "Jost", sans-serif;
     
 
 }
