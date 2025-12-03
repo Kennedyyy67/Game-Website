@@ -17,6 +17,19 @@ $result = $wishlistManager->getUserWishlist($userId);
 $wishlist = $result['success'] ? $result['wishlist'] : [];
 $error = $result['success'] ? null : $result['error'];
 
+$wishlistItems = array_map(function($item) {
+    return [
+        'title' => $item['title'] ?? 'Unknown Title',
+        'gameID' => $item['game_id'],
+        'thumb' => $item['thumb'] ?? 'placeholder.jpg',
+        'normalPrice' => $item['retail_price'] ?? $item['current_price'] ?? 'N/A',
+        'salePrice' => $item['current_price'] ?? 'N/A',
+        'savings' => round($item['savings'] ?? 0),
+        'createdAt' => date('M d, Y', strtotime($item['created_at'])),
+        'dealID' => $item['deal_id'] ?? null
+    ];
+}, $wishlist);
+
 ?>
 
 <!DOCTYPE html>
@@ -25,6 +38,7 @@ $error = $result['success'] ? null : $result['error'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wishlist</title>
+    <link rel="stylesheet" href="Important/main.css">
 </head>
 <body>
 
@@ -41,33 +55,13 @@ $error = $result['success'] ? null : $result['error'];
         <?php elseif (empty($wishlist)): ?>
             <p>Your wishlist is empty. Go back to the <a href="mainmenu.php">Deals page</a> to add some games!</p>
         <?php else: ?>
-            
-            <div>
-                
-                <?php foreach ($wishlist as $item): 
-                    $title = htmlspecialchars($item['title'] ?? 'Unknown Title');
-                    $thumb = htmlspecialchars($item['thumb'] ?? 'placeholder.jpg');
-                    $targetPrice = $item['target_price'] ? '$' . number_format($item['target_price'], 2) : 'N/A';
-                    $gameId = htmlspecialchars($item['game_id']);
-                    $createdAt = date('M d, Y', strtotime($item['created_at']));
-                    $alertText = $item['price_alert'] ? 'PRICE ALERT!' : 'No Alert';
-                ?>
-                    <!-- Wishlist Item Card -->
-                    <div>
-                        <img src="<?= $thumb ?>" alt="<?= $title ?>" style="width: 100%; height: auto; max-height: 150px; object-fit: cover;">
-                        <h3><?= $title ?></h3>
-                        <div class="price-info">
-                        <p><strong>Added On:</strong> <?= $createdAt ?></p>
-                        <p>Target: <?= $targetPrice ?></p>
-                        <p style="color: <?= $item['price_alert'] ? 'green' : 'red' ?>; font-weight: bold;"><?= $alertText ?></p>
-                        <button onclick="removeFromWishlist('<?= $gameId ?>')">Remove</button>
-                    </div>
-                <?php endforeach; ?>
-            </div>
+            <div class="grid-container" id="wishlist-grid"></div>
         <?php endif; ?>
     </div>
 
     <script>
+        const grid = document.getElementById('wishlist-grid');
+
         function removeFromWishlist(gameId) {
             if (confirm("Are you sure you want to remove this game from your wishlist?")) {
                const formData = new FormData();
@@ -89,9 +83,55 @@ $error = $result['success'] ? null : $result['error'];
             .catch(error => {
                 console.error('Network error:', error);
                 alert('An error occurred while communicating with the server.');
-              }); 
-            } 
+              });
+            }
         }
+
+        function renderDeals(deals) {
+            deals.forEach(game => {
+                const card = document.createElement('div');
+                card.classList.add('card');
+
+                const savings = Math.round(game.savings);
+
+                card.innerHTML = `
+                    <div class="card-image">
+                        <img src="${game.thumb}" alt="${game.title}" loading="lazy">
+                    </div>
+                    <div class="card-info">
+                        <p><strong>Added On:</strong> ${game.createdAt}</p>
+                        <h3>${game.title}</h3>
+                        <div class="price">
+                            <span class="original">$${game.normalPrice}</span>
+                            <span class="sale">$${game.salePrice}</span>
+                            <span style="font-size:12px; color:#ff4444; margin-left:5px;">-${savings}%</span>
+                        </div>
+                        <button onclick="removeFromWishlist('${game.gameID}')">Remove</button>
+                    </div>
+                `;
+
+                if (game.dealID) {
+                    card.style.cursor = 'pointer';
+                    card.onclick = (event) => {
+                        // Prevent redirect if user clicks the remove button
+                        if (!event.target.matches('button')) {
+                            try {                             
+                                window.open(`https://www.cheapshark.com/redirect?dealID=${game.dealID}`, '_blank');
+                            } catch (error) {
+                                console.error('Failed to open redirect:', error);
+                            }
+                        }
+                    };
+                }
+
+                grid.appendChild(card);
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const wishlistItems = <?php echo json_encode($wishlistItems); ?>;
+            renderDeals(wishlistItems);
+        });
     </script>
 </body>
 </html>

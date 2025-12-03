@@ -20,6 +20,7 @@ require_once 'wishlist_manager.php';
 
 // 4. Get data from POST request
 $gameId = $_POST['game_id'] ?? null;
+$storeId = $_POST['store_id'] ?? null;
 $targetPrice = $_POST['target_price'] ?? null;
 $userId = $_SESSION['user_id'];
 
@@ -36,7 +37,7 @@ try {
     // The targetPrice might be an empty string from the form, convert to null if so.
     $targetPrice = $targetPrice === '' ? null : (float)$targetPrice;
 
-    $result = $wishlistManager->addToWishlist($userId, $gameId, $targetPrice);
+    $result = $wishlistManager->addToWishlist($userId, $gameId, $storeId, $targetPrice);
     
     echo json_encode($result);
 

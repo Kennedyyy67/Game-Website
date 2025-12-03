@@ -15,7 +15,7 @@ class WishlistManager {
     /**
      * Add game to user's wishlist
      */
-    public function addToWishlist($userId, $gameId, $targetPrice = null) {
+    public function addToWishlist($userId, $gameId, $storeId = null, $targetPrice = null) {
         try {
             // Check if already in wishlist
             $checkStmt = $this->pdo->prepare("
@@ -28,36 +28,108 @@ class WishlistManager {
                 return ['success' => false, 'error' => 'Game already in wishlist'];
             }
             
-            // Get game details from API if not in database
+            // Always fetch game details from API
+            $gameDetails = $this->api->getGameDetails($gameId);
+            if (isset($gameDetails['error']) || !isset($gameDetails['info'])) {
+                return ['success' => false, 'error' => 'Game not found'];
+            }
+
+            // Check if game is already in database
             $gameStmt = $this->pdo->prepare("
                 SELECT id FROM games WHERE game_id = ?
             ");
             $gameStmt->execute([$gameId]);
-            
+
             if (!$gameStmt->fetch()) {
-                $gameDetails = $this->api->getGameDetails($gameId);
-                if (isset($gameDetails['error']) || !isset($gameDetails['info'])) {
-                    return ['success' => false, 'error' => 'Game not found'];
+                // Extract game information
+                $title = $gameDetails['info']['title'] ?? 'Unknown Game';
+                $thumb = $gameDetails['info']['thumb'] ?? '';
+                $steamRating = $gameDetails['info']['steamRatingPercent'] ?? 0;
+
+                // Extract pricing information from deals (use specific store's deal if storeId provided, else cheapest)
+                $normalPrice = null;
+                $salePrice = null;
+                $savings = null;
+
+                if (isset($gameDetails['deals']) && is_array($gameDetails['deals']) && count($gameDetails['deals']) > 0) {
+                    $selectedDeal = null;
+                    if ($storeId !== null) {
+                        // Find deal for specific store
+                        foreach ($gameDetails['deals'] as $deal) {
+                            if (($deal['storeID'] ?? null) == $storeId) {
+                                $selectedDeal = $deal;
+                                break;
+                            }
+                        }
+                    }
+                    if (!$selectedDeal) {
+                        // Fallback to cheapest if no store-specific deal found or storeId not provided
+                        usort($gameDetails['deals'], function($a, $b) {
+                            return ($a['price'] ?? 999999) <=> ($b['price'] ?? 999999);
+                        });
+                        $selectedDeal = $gameDetails['deals'][0];
+                    }
+                    $normalPrice = $selectedDeal['retailPrice'] ?? null;
+                    $salePrice = $selectedDeal['price'] ?? null;
+                    $savings = $selectedDeal['savings'] ?? null;
                 }
-                
-                // Add game to database
+
+                // Add game to database with pricing information
                 $insertGameStmt = $this->pdo->prepare("
-                    INSERT INTO games (game_id, title, thumb) 
-                    VALUES (?, ?, ?)
+                    INSERT INTO games (game_id, title, normal_price, sale_price, savings, steam_rating, thumb)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
                 ");
                 $insertGameStmt->execute([
                     $gameId,
-                    $gameDetails['info']['title'] ?? 'Unknown Game',
-                    $gameDetails['info']['thumb'] ?? ''
+                    $title,
+                    $normalPrice,
+                    $salePrice,
+                    $savings,
+                    $steamRating,
+                    $thumb
                 ]);
+            }
+
+            // Always insert/update deal data for the relevant stores
+            if (isset($gameDetails['deals']) && is_array($gameDetails['deals'])) {
+                $dealsToInsert = $gameDetails['deals'];
+                if ($storeId !== null) {
+                    // Only insert deals for the specific store
+                    $dealsToInsert = array_filter($dealsToInsert, function($deal) use ($storeId) {
+                        return ($deal['storeID'] ?? null) == $storeId;
+                    });
+                }
+
+                foreach ($dealsToInsert as $deal) {
+                    $dealStmt = $this->pdo->prepare("
+                        INSERT INTO deals (game_id, store_id, deal_id, price, retail_price, savings, is_on_sale)
+                        VALUES (?, ?, ?, ?, ?, ?, ?)
+                        ON DUPLICATE KEY UPDATE
+                        price = VALUES(price),
+                        retail_price = VALUES(retail_price),
+                        savings = VALUES(savings),
+                        is_on_sale = VALUES(is_on_sale),
+                        last_updated = CURRENT_TIMESTAMP
+                    ");
+
+                    $dealStmt->execute([
+                        $gameId,
+                        $deal['storeID'] ?? null,
+                        $deal['dealID'] ?? '',
+                        $deal['price'] ?? null,
+                        $deal['retailPrice'] ?? null,
+                        $deal['savings'] ?? 0,
+                        1  // Mark as on sale since these are current deals
+                    ]);
+                }
             }
             
             // Add to wishlist
             $insertStmt = $this->pdo->prepare("
-                INSERT INTO user_wishlist (user_id, game_id, target_price) 
-                VALUES (?, ?, ?)
+                INSERT INTO user_wishlist (user_id, game_id, store_id, target_price)
+                VALUES (?, ?, ?, ?)
             ");
-            $insertStmt->execute([$userId, $gameId, $targetPrice]);
+            $insertStmt->execute([$userId, $gameId, $storeId, $targetPrice]);
             
             return ['success' => true, 'message' => 'Game added to wishlist'];
             
@@ -94,7 +166,7 @@ class WishlistManager {
     public function getUserWishlist($userId) {
         try {
             $query = "
-                SELECT 
+                SELECT
                     w.*,
                     g.title,
                     g.thumb,
@@ -103,40 +175,27 @@ class WishlistManager {
                     d.retail_price,
                     d.savings,
                     d.is_on_sale,
-                    d.last_updated
+                    d.last_updated,
+                    d.deal_id
                 FROM user_wishlist w
                 JOIN games g ON w.game_id = g.game_id
-                LEFT JOIN deals d ON w.game_id = d.game_id
+                LEFT JOIN deals d ON w.game_id = d.game_id AND w.store_id = d.store_id
                 WHERE w.user_id = ?
                 ORDER BY w.created_at DESC
             ";
-            
+
             $stmt = $this->pdo->prepare($query);
             $stmt->execute([$userId]);
             $wishlist = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
-            // Check for price alerts
-            foreach ($wishlist as &$item) {
-                $item['price_alert'] = $this->checkPriceAlert($item);
-            }
-            
+
             return ['success' => true, 'wishlist' => $wishlist];
-            
+
         } catch (PDOException $e) {
             return ['success' => false, 'error' => 'Database error: ' . $e->getMessage()];
         }
     }
     
-    /**
-     * Check if current price meets target price
-     */
-    private function checkPriceAlert($wishlistItem) {
-        if (!$wishlistItem['target_price'] || !$wishlistItem['current_price']) {
-            return false;
-        }
-        
-        return $wishlistItem['current_price'] <= $wishlistItem['target_price'];
-    }
+
     
     /**
      * Update target price for wishlist item

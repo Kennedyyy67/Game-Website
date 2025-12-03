@@ -139,6 +139,7 @@ if (!isset($_SESSION['user_id'])) {
 
             const formData = new FormData();
             formData.append('game_id', gameId);
+            formData.append('store_id', currentStoreId);
             if (targetPrice !== null) {
                 formData.append('target_price', targetPrice);
             }
