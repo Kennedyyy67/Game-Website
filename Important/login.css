@@ -1,0 +1,163 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    
+    
+
+}
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    position: relative;
+}
+
+body::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 70%;
+    height: 100%;
+    background-image: url(login.png);
+    background-size: cover;
+    background-position: center;
+    z-index: -1; 
+}
+
+
+.wrapper {
+    width: 30%;
+    height: 100%;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+
+
+.loginform {
+    width: 100%;
+    max-width: 450px;
+    background-color:white;
+    height: 100%;
+    padding: 80px 0;
+    flex-direction: column;
+    position: flex;
+
+    
+}
+
+.loginform h2 {
+    margin-top: 80px;
+  
+    font-size: 50px;
+    font-weight: 750;
+ 
+}
+
+.input-box {
+    margin-top: 50px;
+    width: 400px;
+    height: 75px;
+    border-radius: 30px;
+    padding: 20px 40px;
+    border: none;
+    outline: none;
+    box-shadow: 0 0 14px rgba(0, 0, 0, 0.381);
+    background-color: #9b7b7b32;;
+}
+
+.buttons {
+    margin-top: 70px;
+    background-color: rgb(255, 255, 255);
+    width: 400px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    display: flex; 
+}
+
+.submitbtn {
+    width: 170px;
+    height: 70px;
+    display: flex;
+    align-items: center ;
+    justify-content: center ;
+    cursor: pointer;
+    transition: 0.6s;
+    background: #2bdd1e;
+    color: #ffffff;
+    border: none;
+    border-radius: 40px;
+    font-size: 25px;
+    font-weight: 300;
+
+
+}
+
+.submitbtn:hover {
+    background-position: right center; 
+    color: #2bdd1e;
+    text-decoration: none;
+    box-shadow: 0 0 15px rgb(0, 255, 0);
+    background-color: black;
+}
+
+
+.regbtn {
+    width: 170px;
+    height: 70px;
+    display: flex;
+    align-items: center ;
+    justify-content: center ;
+    cursor: pointer;
+    transition: 0.6s;
+    background: #000000;
+    color: #00ff00;
+    border: none;
+    border-radius: 40px;
+    font-size: 25px;
+    font-weight: 500;
+
+}
+
+.regbtn:hover {
+    background-position: right center; 
+    color: #2bdd1e;
+    text-decoration: none;
+    box-shadow: 0 0 15px rgb(9, 255, 0);
+    background-color: #ffffff;
+}
+
+.logo {
+    margin-bottom: 35px;
+    display: flex;
+    align-items: center;   
+    gap: 10px;             
+}
+
+.logo h1 {
+    margin: 0;
+    color: #2bdd1e;
+    
+    font-size: 90px;
+    font-weight: 600;          
+}
+
+.logoimg {
+    width: 100px;
+    height: 100px;
+
+}
