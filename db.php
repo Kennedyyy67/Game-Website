@@ -1,6 +1,6 @@
 <?php
 // Database configuration for Game Deals Website
-$servername = "localhost:4306";
+$servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "game_deals";
@@ -66,20 +66,20 @@ foreach ($createTables as $query) {
     }
 }
 
-/**
- * Migration script to add store_id column to user_wishlist table
- 
-*require_once 'db.php';
 
-*try {
- *   global $pdo;
-  *  $pdo->exec('ALTER TABLE user_wishlist ADD COLUMN store_id VARCHAR(50) DEFAULT NULL');
-   * echo "Successfully added store_id column to user_wishlist table\n";
-*} catch (PDOException $e) {
- *   if (strpos($e->getMessage(), 'Duplicate column name') !== false) {
-  *      echo "store_id column already exists\n";
-   * } else {
-    *    echo "Error: " . $e->getMessage() . "\n";
-    *}
-*} */
+//   Migration script to add store_id column to user_wishlist table
+ 
+// require_once 'db.php';
+
+// try {
+//     global $pdo;
+//     $pdo->exec('ALTER TABLE user_wishlist ADD COLUMN store_id VARCHAR(50) DEFAULT NULL');
+//     echo "Successfully added store_id column to user_wishlist table\n";
+// } catch (PDOException $e) {
+//     if (strpos($e->getMessage(), 'Duplicate column name') !== false) {
+//         echo "store_id column already exists\n";
+//     } else {
+//         echo "Error: " . $e->getMessage() . "\n";
+//     }
+// } 
 ?>
