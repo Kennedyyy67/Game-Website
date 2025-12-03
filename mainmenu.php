@@ -37,6 +37,44 @@ if (!isset($_SESSION['user_id'])) {
     </div>
     
 
+        <!-- <div class="sort-container">
+            <label for="sort-select">Sort by:</label>
+            <select id="sort-select">
+                <option value="Deal Rating">Deal Rating</option>
+                <option value="Title">Title</option>
+                <option value="Savings">Savings</option>
+                <option value="Price">Price</option>
+                <option value="Metacritic">Metacritic</option>
+                <option value="Reviews">Reviews</option>
+                <option value="Recent">Recent</option>
+                <option value="Release">Release</option>
+            </select>
+            <button id="sort-direction-btn" title="Toggle sort direction">▼</button>
+        </div> -->
+
+
+    </header>
+
+    <main>
+         <div class="sort-container">
+            <label for="sort-select">Sort by:</label>
+            <select id="sort-select">
+                <option value="Deal Rating">Deal Rating</option>
+                <option value="Title">Title</option>
+                <option value="Savings">Savings</option>
+                <option value="Price">Price</option>
+                <option value="Metacritic">Metacritic</option>
+                <option value="Reviews">Reviews</option>
+                <option value="Recent">Recent</option>
+                <option value="Release">Release</option>
+            </select>
+            <button id="sort-direction-btn" title="Toggle sort direction">▼</button>
+        </div>
+        
+        <div class="grid-container" id="deals-grid">
+            </div>
+        
+       
     <div class="about">
         
         <!-- <img src="Important/aboutpic.jpg" alt="GG Deals Logo" class="about-img"> -->

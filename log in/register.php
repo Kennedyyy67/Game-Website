@@ -7,19 +7,23 @@ require "../db.php";
 <html>
 <head>
     <title>Create Account</title>
+    <link rel="stylesheet" href="../Important/reg.css">
 </head>
 <body>
 
+
+<div class="wrapper">
 <div class="container">
-    <h2>Create Account</h2>
+    <h2>Sign Up</h2>
 
     <form method="POST">
         <input type="text" class="input-box" name="username" placeholder="Username" required>
         <input type="email" class="input-box" name="email" placeholder="Email" required>
         <input type="password" class="input-box" name="password" placeholder="Password" required>
 
-        <button type="submit" name="register" class="btn green">Create</button>
+        <button type="submit" name="register" class="reg">Create</button>
     </form>
+
 
 <?php
 if (isset($_POST['register'])) {
@@ -55,6 +59,7 @@ if (isset($_POST['register'])) {
 }
 ?>
 
+</div>
 </div>
 
 </body>

@@ -12,19 +12,34 @@ if (isset($_SESSION['user_id'])) {
 <html>
 <head>
     <title>Log In</title>
+  
+    <link rel="stylesheet" href="../Important/login.css">
 </head>
 <body>
 
-<div class="container">
-    <h2>Welcome to GG Deals</h2>
+
+
+
+
+<div class="wrapper">
+<div class="loginform">
+    <div class="logo">
+    <img src="../Important/gglogo.png" alt="GG Deals Logo" class="logoimg">
+    <h1>Deals</h1>
+    </div>
+
+
+    <h2>Welcome!</h2>
 
     <form method="POST">
         <input type="text" class="input-box" name="username" placeholder="Username" required>
         <input type="password" class="input-box" name="password" placeholder="Password" required>
+        <div class="buttons">
+        <button type="submit" name="login" class="submitbtn">Log In</button>
+        <button type="button" onclick="window.location='register.php'" class="regbtn">Sign Up</button>
+        </div>
+     </form>
 
-        <button type="submit" name="login" class="btn green">Log In</button>
-        <button type="button" onclick="window.location='register.php'" class="btn green">Sign Up</button>
-    </form>
 
 <?php
 if (isset($_POST['login'])) {
@@ -54,6 +69,7 @@ if (isset($_POST['login'])) {
 }
 ?>
 
+</div>
 </div>
 
 </body>
