@@ -4,6 +4,8 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: log in/main.php");
     exit;
 }
+
+$username = $_SESSION['username'];
 ?>
 <!DOCTYPE html>
 <head>
@@ -12,8 +14,10 @@ if (!isset($_SESSION['user_id'])) {
     <title>GG - Infinite Deals</title>
     <link rel="stylesheet" href="Important/main.css">
 </head>
+
 <body>
-<div class="top-bar">
+
+    <div class="top-bar">
         <div class="logowrapper">
             <img src="Important/gglogo.png" alt="GG Deals Logo" class="logoimg">
         
@@ -35,57 +39,18 @@ if (!isset($_SESSION['user_id'])) {
         </div>
 
     </div>
-    
-
-        <!-- <div class="sort-container">
-            <label for="sort-select">Sort by:</label>
-            <select id="sort-select">
-                <option value="Deal Rating">Deal Rating</option>
-                <option value="Title">Title</option>
-                <option value="Savings">Savings</option>
-                <option value="Price">Price</option>
-                <option value="Metacritic">Metacritic</option>
-                <option value="Reviews">Reviews</option>
-                <option value="Recent">Recent</option>
-                <option value="Release">Release</option>
-            </select>
-            <button id="sort-direction-btn" title="Toggle sort direction">▼</button>
-        </div> -->
-
 
     </header>
-
-    <main>
-         <div class="sort-container">
-            <label for="sort-select">Sort by:</label>
-            <select id="sort-select">
-                <option value="Deal Rating">Deal Rating</option>
-                <option value="Title">Title</option>
-                <option value="Savings">Savings</option>
-                <option value="Price">Price</option>
-                <option value="Metacritic">Metacritic</option>
-                <option value="Reviews">Reviews</option>
-                <option value="Recent">Recent</option>
-                <option value="Release">Release</option>
-            </select>
-            <button id="sort-direction-btn" title="Toggle sort direction">▼</button>
-        </div>
-        
-        <div class="grid-container" id="deals-grid">
-            </div>
-        
-       
+    
     <div class="about">
         
         <!-- <img src="Important/aboutpic.jpg" alt="GG Deals Logo" class="about-img"> -->
         <div class="textabout">
-        <h2>Welcome User!</h2>
-        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Suscipit a nobis, adipisci voluptas nihil error iure nostrum ullam dolorem mollitia expedita facere dolor corporis odio laudantium eos minima quod asperiores.</p>
+        <h2>Welcome, <?php echo htmlspecialchars($username); ?></h2>
+        <p>Welcome to GG Deals, where we give you the best deals for your favorite games! Power up your library without draining your wallet.</p>
         </div>
     </div>
-       
 
-    </div>
 
     <nav class="stores">
         <div class="hstores">
@@ -101,23 +66,26 @@ if (!isset($_SESSION['user_id'])) {
         </nav>
     </nav>
 
-    <div class="sort-container">
-        <label for="sort-select">Sort by:</label>
-        <select id="sort-select">
-            <option value="Deal Rating">Deal Rating</option>
-            <option value="Title">Title</option>
-            <option value="Savings">Savings</option>
-            <option value="Price">Price</option>
-            <option value="Metacritic">Metacritic</option>
-            <option value="Reviews">Reviews</option>
-            <option value="Recent">Recent</option>
-            <option value="Release">Release</option>
-        </select>
-        <button id="sort-direction-btn" title="Toggle sort direction">▼</button>
-    </div>
-</header>
 
-<main>
+    
+         <div class="sort-container">
+            <label for="sort-select">Sort by:</label>
+            <select id="sort-select">
+                <option value="Deal Rating">Deal Rating</option>
+                <option value="Title">Title</option>
+                <option value="Savings">Savings</option>
+                <option value="Price">Price</option>
+                <option value="Metacritic">Metacritic</option>
+                <option value="Reviews">Reviews</option>
+                <option value="Recent">Recent</option>
+                <option value="Release">Release</option>
+            </select>
+            <button id="sort-direction-btn" title="Toggle sort direction">▼</button>
+        </div>
+
+    </header>
+
+    <main>
     <div class="grid-container" id="deals-grid">
         </div>
 
@@ -129,7 +97,11 @@ if (!isset($_SESSION['user_id'])) {
     <div class="loader-container">
         <div class="loader" id="loader"></div>
     </div>
-</main>
+    </main>
+
+
+
+
 
 <script>
     // --- Configuration ---
@@ -319,7 +291,7 @@ if (!isset($_SESSION['user_id'])) {
                     <div class="price">
                         ${priceHtml}
                     </div>
-                     <button class="btn-black add-to-wishlist-btn" data-game-id="${game.gameID}" onclick="addToWishlist(event,'${game.gameID}')">Add to Wishlist</button>
+                     <button class="addwishbtn" data-game-id="${game.gameID}" onclick="addToWishlist(event,'${game.gameID}')">Add to Wishlist</button>
                 </div>
             `;
 
@@ -412,5 +384,38 @@ if (!isset($_SESSION['user_id'])) {
         fetchDeals();
     });
 </script>
+
+<div class="footer">
+    <div class="footlog">
+        <img src="Important/gglogo.png" alt="GG Deals Logo" class="logoimg">
+        
+
+    </div>
+
+    <div class="rights">
+        <h3>All Rights Reserve to GG Deals and API Shark</h3>
+
+
+    </div>
+
+    <div class="contact">
+        <p>Contact us through:</p>
+        <p>RussyDoesGaming@gmail.com</p>
+        <p>0926267895</p>
+
+    </div>
+
+
+
+
+
+</div>
+
+
+
+
+
+
 </body>
+
 </html>

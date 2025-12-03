@@ -40,31 +40,33 @@ $wishlistItems = array_map(function($item) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wishlist</title>
-    <link rel="stylesheet" href="Important/main.css">
+    <link rel="stylesheet" href="Important/wishlist.css">
 </head>
 <body>
 
     <!-- Header Area -->
-    <div>
-        <h1>Wishlist</h1>
-        <button onclick="window.location='mainmenu.php'">Return</button>
+    <div class="nav">
+        <button onclick="window.location='mainmenu.php'">
+             <img src="Important/returnimg.png" alt="GG Deals Logo" class="btnimg">Return</button>
+         <h1>Wishlist</h1>
+        
     </div>
 
     <!-- Main Content Area -->
     <div>
-        <?php if ($error): ?>
+          <?php if ($error): ?>
             <p>Error loading wishlist: <?= htmlspecialchars($error) ?></p>
-        <?php elseif (empty($wishlist)): ?>
+         <?php elseif (empty($wishlist)): ?>
             <p>Your wishlist is empty. Go back to the <a href="mainmenu.php">Deals page</a> to add some games!</p>
         <?php else: ?>
             <div class="grid-container" id="wishlist-grid"></div>
-        <?php endif; ?>
+     <?php endif; ?>
     </div>
 
     <script>
         const grid = document.getElementById('wishlist-grid');
 
-        function removeFromWishlist(gameId) {
+    function removeFromWishlist(gameId) {
             if (confirm("Are you sure you want to remove this game from your wishlist?")) {
                const formData = new FormData();
                formData.append('game_id', gameId);
@@ -73,7 +75,7 @@ $wishlistItems = array_map(function($item) {
                method: 'POST',
                body: formData
             })
-            .then(response => response.json())
+        .then(response => response.json())
             .then(result => {
                 if (result.success) {
                     alert(result.message);
@@ -89,7 +91,7 @@ $wishlistItems = array_map(function($item) {
             }
         }
 
-        function editNotes(button, gameId) {
+              function editNotes(button, gameId) {
             const currentNotes = decodeURIComponent(button.dataset.notes) || '';
             const newNotes = prompt('Edit notes for this game:', currentNotes);
             if (newNotes !== null && newNotes !== currentNotes) {
@@ -109,7 +111,7 @@ $wishlistItems = array_map(function($item) {
                         window.location.reload(); // Reload to update the notes
                     } else {
                         alert('Error updating notes: ' + (result.error || 'Unknown error.'));
-                    }
+                      }
                 })
                 .catch(error => {
                     console.error('Network error:', error);
@@ -121,9 +123,9 @@ $wishlistItems = array_map(function($item) {
         function renderDeals(deals) {
             deals.forEach(game => {
                 const card = document.createElement('div');
-                card.classList.add('card');
+                   card.classList.add('card');
 
-                const savings = Math.round(game.savings);
+                   const savings = Math.round(game.savings);
 
                 card.innerHTML = `
                     <div class="card-image">
@@ -134,20 +136,20 @@ $wishlistItems = array_map(function($item) {
                         ${game.notesDisplay ? `<p><strong>Notes:</strong> ${game.notesDisplay}</p>` : ''}
                         <h3>${game.title}</h3>
                         <div class="price">
-                            <span class="original">$${game.normalPrice}</span>
+                      <span class="original">$${game.normalPrice}</span>
                             <span class="sale">$${game.salePrice}</span>
-                            <span style="font-size:12px; color:#ff4444; margin-left:5px;">-${savings}%</span>
+            <span style="font-size:12px; color:#ff4444; margin-left:5px;">-${savings}%</span>
                         </div>
                         <button data-notes="${encodeURIComponent(game.notes)}" onclick="editNotes(this, '${game.gameID}')">Edit Notes</button>
                         <button onclick="removeFromWishlist('${game.gameID}')">Remove</button>
-                    </div>
+                       </div>
                 `;
 
                 if (game.dealID) {
                     card.style.cursor = 'pointer';
                     card.onclick = (event) => {
                         // Prevent redirect if user clicks the remove button
-                        if (!event.target.matches('button')) {
+           if (!event.target.matches('button')) {
                             try {                             
                                 window.open(`https://www.cheapshark.com/redirect?dealID=${game.dealID}`, '_blank');
                             } catch (error) {
@@ -161,7 +163,7 @@ $wishlistItems = array_map(function($item) {
             });
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
+      window.addEventListener('DOMContentLoaded', () => {
             const wishlistItems = <?php echo json_encode($wishlistItems); ?>;
             renderDeals(wishlistItems);
         });

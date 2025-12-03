@@ -4,7 +4,7 @@
  * Creates the game_deals database and all required tables
  */
 
-$servername = "localhost:4306";
+$servername = "localhost";
 $username = "root";
 $password = "";
 
